@@ -1,11 +1,13 @@
 package com.demo.example.student_library_management_system.model;
 
-import com.demo.example.student_library_management_system.CardStatus;
+import com.demo.example.student_library_management_system.enums.CardStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="card")
@@ -27,6 +29,16 @@ public class Card {
     @Column(name="updated_date", nullable = false)
     @UpdateTimestamp // when card is updating, automatically adds date and time
     private Date updatedDate;
+
+    @OneToOne
+    @JoinColumn // it joins the primary key of student table as foreign key in card table
+    private Student student;
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<Book> bookList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "card",cascade = CascadeType.ALL)
+    private List<Transaction> transactionList = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -58,5 +70,29 @@ public class Card {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public List<Book> getBookList() {
+        return bookList;
+    }
+
+    public void setBookList(List<Book> bookList) {
+        this.bookList = bookList;
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 }

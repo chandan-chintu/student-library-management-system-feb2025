@@ -35,6 +35,9 @@ public class Student {
     @Column(name="dept", nullable = false)
     private String dept;
 
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    private Card card;
+
     public int getId() {
         return id;
     }
@@ -105,5 +108,13 @@ public class Student {
 
     public void setDept(String dept) {
         this.dept = dept;
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
     }
 }
