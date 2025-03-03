@@ -39,8 +39,9 @@ public class StudentService {
         Optional<Student> studentOptional = studentRepository.findById(id);
         if(studentOptional.isPresent()){
             return studentOptional.get();
+        } else {
+            throw new RuntimeException("Student not found with id : "+id);
         }
-        return null;
     }
 
     public List<Student> findAllStudents(){
@@ -111,5 +112,10 @@ public class StudentService {
     public String countStudent(){
         long totalCount  = studentRepository.count();
         return "Total students present are : "+totalCount;
+    }
+
+    public List<Student> findStudentBySemAndDept(String inSem, String inDept){
+        List<Student> studentList = studentRepository.findBySemAndDept(inSem,inDept);
+        return studentList;
     }
 }

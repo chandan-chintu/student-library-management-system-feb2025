@@ -4,6 +4,7 @@ import com.demo.example.student_library_management_system.model.Student;
 import com.demo.example.student_library_management_system.requestdto.StudentRequestDto;
 import com.demo.example.student_library_management_system.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.stylesheets.LinkStyle;
 
@@ -17,15 +18,23 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("/save")
-    public String saveStudent(@RequestBody StudentRequestDto studentRequestDto){
-        String response = studentService.saveStudent(studentRequestDto);
-        return response;
+    public ResponseEntity<?> saveStudent(@RequestBody StudentRequestDto studentRequestDto){
+        try {
+            String response = studentService.saveStudent(studentRequestDto);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Some exception occured : "+e.getMessage());
+        }
     }
 
     @GetMapping("/find/{id}")
-    public Student findStudentById(@PathVariable int id){
-        Student student = studentService.findStudentById(id);
-        return student;
+    public ResponseEntity<?> findStudentById(@PathVariable int id){
+        try {
+            Student student = studentService.findStudentById(id);
+            return ResponseEntity.ok(student);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Some exception occured : "+e.getMessage());
+        }
     }
 
     @GetMapping("/findAll")
@@ -55,6 +64,12 @@ public class StudentController {
     @GetMapping("/findAllByPage")
     public List<Student> findStudentByPage(@RequestParam int pageNo, @RequestParam int pageSize){
         List<Student> studentList = studentService.findStudentByPageAndSort(pageNo,pageSize);
+        return studentList;
+    }
+
+    @GetMapping("/findBySemAndDept")
+    public List<Student> findStudentBySemAndDept(@RequestParam String sem,@RequestParam String dept){
+        List<Student> studentList= studentService.findStudentBySemAndDept(sem,dept);
         return studentList;
     }
 
